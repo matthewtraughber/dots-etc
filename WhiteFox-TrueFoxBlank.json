@@ -268,9 +268,9 @@
                     "key": "F13",
                     "label": "F13"
                 },
-                "1": {
-                    "key": "CONS:INTERNETBROWSER",
-                    "label": "WEB"
+                "2": {
+                    "key": "#:ledControl( 5, 0, 0 )",
+                    "label": "LED OFF"
                 }
             }
         },
@@ -286,8 +286,8 @@
                     "label": "TAB"
                 },
                 "1": {
-                    "key": "BACKSPACE",
-                    "label": "BKSP"
+                    "key": "DELETE",
+                    "label": "DEL"
                 }
             }
         },
@@ -301,6 +301,10 @@
                 "0": {
                     "key": "Q",
                     "label": "Q"
+                },
+                "1": {
+                    "key": "BACKSPACE",
+                    "label": "BKSP"
                 }
             }
         },
@@ -386,6 +390,10 @@
                 "0": {
                     "key": "Y",
                     "label": "Y"
+                },
+                "1": {
+                    "key": "HOME",
+                    "label": "HOME"
                 }
             }
         },
@@ -433,6 +441,10 @@
                 "0": {
                     "key": "O",
                     "label": "O"
+                },
+                "1": {
+                    "key": "PAGEDOWN",
+                    "label": "PGDN"
                 }
             }
         },
@@ -507,9 +519,9 @@
                     "key": "F14",
                     "label": "F14"
                 },
-                "1": {
-                    "key": "CONS:CALCULATOR",
-                    "label": "CALC"
+                "2": {
+                    "key": "#:ledControl( 4, 15, 0 )",
+                    "label": "LED+"
                 }
             }
         },
@@ -617,6 +629,10 @@
                 "0": {
                     "key": "H",
                     "label": "H"
+                },
+                "1": {
+                    "key": "END",
+                    "label": "END"
                 }
             }
         },
@@ -721,9 +737,9 @@
                     "key": "F15",
                     "label": "F15"
                 },
-                "1": {
-                    "key": "CONS:FILEBROWSER",
-                    "label": "FILES"
+                "2": {
+                    "key": "#:ledControl( 3, 15, 0 )",
+                    "label": "LED-"
                 }
             }
         },
@@ -828,10 +844,6 @@
                 "0": {
                     "key": "M",
                     "label": "M"
-                },
-                "1": {
-                    "key": "PAGEDOWN",
-                    "label": "PGDN"
                 }
             }
         },
@@ -845,10 +857,6 @@
                 "0": {
                     "key": "COMMA",
                     "label": ","
-                },
-                "1": {
-                    "key": "HOME",
-                    "label": "HOME"
                 }
             }
         },
@@ -864,8 +872,8 @@
                     "label": "."
                 },
                 "1": {
-                    "key": "END",
-                    "label": "END"
+                    "key": "LEFT",
+                    "label": "\u2190"
                 }
             }
         },
@@ -920,8 +928,16 @@
                     "label": "F16"
                 },
                 "1": {
-                    "key": "SYS:SLEEP",
-                    "label": "SLEEP"
+                    "key": "LAT3",
+                    "label": "LATCH-3"
+                },
+                "3": {
+                    "key": "#:flashMode()",
+                    "label": "FLASH"
+                },
+                "7": {
+                    "key": "#:flashMode()",
+                    "label": "FLASH"
                 }
             }
         },
@@ -1017,6 +1033,10 @@
                 "0": {
                     "key": "LEFT",
                     "label": "\u2190"
+                },
+                "2": {
+                    "key": "P-",
+                    "label": "P-"
                 }
             }
         },
@@ -1043,6 +1063,10 @@
                 "0": {
                     "key": "RIGHT",
                     "label": "\u2192"
+                },
+                "2": {
+                    "key": "P+",
+                    "label": "P+"
                 }
             }
         }
