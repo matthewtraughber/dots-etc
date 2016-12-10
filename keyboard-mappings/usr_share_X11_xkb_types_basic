@@ -1,0 +1,58 @@
+type "CUSTOM" {
+  level_name[Level1] = "Base";
+  level_name[Level2] = "Caps";
+  level_name[Level3] = "Custom";
+
+  modifiers = Control+Alt+Shift+Mod5;
+
+  // Lets CUSTOM type keys work as normal (as base level 1)
+  map[None] = Level1;
+
+  // Lets CUSTOM type keys work when shifted
+  map[Shift] = Level2;
+
+  // Lets CUSTOM type keys work when Mod5 applied
+  map[Mod5] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Shift applied
+  map[Mod5+Shift] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Control applied
+  map[Mod5+Control] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Alt applied
+  map[Mod5+Alt] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Control+Alt applied
+  map[Mod5+Control+Alt] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Control+Shift applied
+  map[Mod5+Control+Shift] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Alt+Shift applied
+  map[Mod5+Alt+Shift] = Level3;
+
+  // Lets CUSTOM type keys work when Mod5 & Control+Shift+Alt applied
+  map[Mod5+Control+Shift+Alt] = Level3;
+
+  // Lets CUSTOM type keys apply Mod5+Shift when Mod5 & Shift applied
+  preserve[Mod5+Shift] = Mod5+Shift;
+
+  // Lets CUSTOM type keys apply Mod5+Control when Mod5 & Control applied
+  preserve[Mod5+Control] = Mod5+Control;
+
+  // Lets CUSTOM type keys apply Mod5+Alt when Mod5 & Alt applied
+  preserve[Mod5+Alt] = Mod5+Alt;
+
+  // Lets CUSTOM type keys apply Mod5+Control+Alt when Mod5 & Control+Alt applied
+  preserve[Mod5+Control+Alt] = Mod5+Control+Alt;
+
+  // Lets CUSTOM type keys apply Mod5+Control+Shift when Mod5 & Control+Shift applied
+  preserve[Mod5+Control+Shift] = Mod5+Control+Shift;
+
+  // Lets CUSTOM type keys apply Mod5+Alt+Shift when Mod5 & Alt+Shift applied
+  preserve[Mod5+Alt+Shift] = Mod5+Alt+Shift;
+
+  // Lets CUSTOM type keys apply Mod5+Control+Shift+Alt when Mod5 & Control+Shift+Alt applied
+  preserve[Mod5+Control+Shift+Alt] = Mod5+Control+Shift+Alt;
+};
