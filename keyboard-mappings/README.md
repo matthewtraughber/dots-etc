@@ -1,7 +1,6 @@
 ### Keyboard configuration tweaks
 
-To load changes, run ```setxkbmap```
-
+The filenames reference the specific files (and path) where the modifications should be made. To load changes, run ```setxkbmap```.
 
 > #### NOTE!
 > Due to https://bugs.freedesktop.org/show_bug.cgi?id=78661, you will need to manually run the below commands in order to get custom arrow keys repeating.
@@ -10,4 +9,3 @@ To load changes, run ```setxkbmap```
 > * ```xset r 44```
 > * ```xset r 45```
 > * ```xset r 46```
-
