@@ -44,8 +44,13 @@ key <AC07> {
 
 key <TAB> {
   type="CUSTOM",
-  symbols[Group1] = [ Tab, Tab, BackSpace ]
+  symbols[Group1] = [ Tab, Tab, Delete ]
   // Below is no longer necessary, kept for reference purposes
   // repeat=yes
   // actions[Group1]=[NoAction(), NoAction(), RedirectKey(key=<BKSP>)]
+};
+
+key <AD01> {
+  type="CUSTOM",
+  symbols[Group1] = [ q, Q, BackSpace ]
 };
