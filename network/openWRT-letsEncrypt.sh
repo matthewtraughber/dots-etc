@@ -44,7 +44,7 @@ uci commit
 
 if [ ! -f acme.sh ]; then
   log "downloading acme.sh from github"
-  curl --cacert /root/ssl/cacert.pem https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > acme.sh || exit 2;
+  curl https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > acme.sh || exit 2;
   chmod a+x "acme.sh"
 fi
 
