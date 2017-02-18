@@ -36,10 +36,9 @@ HTTP_ENABLED="$(uci get firewall.http.enabled 2>/dev/null)" ##backup existing co
 log "HTTP server previously *$RESTORE_HTTP*"
 
 log "enabling http server"
-uci set firewall.http.enabled=1
+#uci set firewall.http.enabled=1 # uci: Invalid argument
 uci set uhttpd.main.listen_http=80
-uci commit firewall
-uci commit uhttpd
+uci commit
 /etc/init.d/firewall restart &> /dev/null
 /etc/init.d/uhttpd restart &> /dev/null
 
@@ -74,13 +73,12 @@ fi
 log "restoring port 80 http server configuration, enabled=$RESTORE_HTTP"
 if [ $RESTORE_HTTP = true ]; then
   uci set uhttpd.main.listen_http="$HTTP_LISTEN"
-  uci set firewall.http.enabled=1
+  # uci set firewall.http.enabled=1 # uci: Invalid argument
 else
   uci delete uhttpd.main.listen_http
-  uci set firewall.http.enabled=0
+  #uci set firewall.http.enabled=0 # uci: Invalid argument
 fi
-uci commit firewall
-uci commit uhttpd
+uci commit
 /etc/init.d/firewall restart &> /dev/null
 /etc/init.d/uhttpd restart &> /dev/null
 [ $RESTORE_HTTP = true ] && log "http server staying enabled" || log "disabled HTTP server"
