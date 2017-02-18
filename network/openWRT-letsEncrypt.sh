@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
-## update.sh - manage a OpenWRT LetsEncrypt https instalation
-# HOWTO: 
+#
+### original sourced from https://gist.github.com/t413/3e616611299b22b17b08baa517d2d02c
+#
+## manage an OpenWRT LetsEncrypt https installation
+# HOWTO:
 # - put update.sh in its own directory (like /root/.https)
 # - run ./update.sh your.domain.com (that domain needs to point to your router)
 #  * this get an issued cert from letsencrypt.org using the webroot verification method
@@ -8,8 +11,6 @@
 # - use crontab -e; add the line `0 0 * * * "/root/.https/update.sh" >>/root/.https/log.txt 2>&`
 #  * this runs the update every day, logging everything to log.txt
 #
-# Why? if you're like me and only want https on this will automatically
-# turn on&off http/port 80 temporarily for verification. This script also sets things up nicely for you.
 
 THIS_FOLDER=$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd ) # get path of this script
 
@@ -28,6 +29,7 @@ if uci get firewall.http &> /dev/null; then
   uci set firewall.http.dest_port=80
   uci set firewall.http.name='http web configuration'
 fi
+
 HTTP_LISTEN="$(uci get uhttpd.main.listen_http 2>/dev/null)" ##backup existing config
 HTTP_ENABLED="$(uci get firewall.http.enabled 2>/dev/null)" ##backup existing config
 [ ! -z $HTTP_LISTEN ] && [ "$HTTP_ENABLED" != "0" ] && RESTORE_HTTP=true || RESTORE_HTTP=false;
@@ -41,14 +43,9 @@ uci commit uhttpd
 /etc/init.d/firewall restart &> /dev/null
 /etc/init.d/uhttpd restart &> /dev/null
 
-## check dependent packages!
-hash curl 2>/dev/null || { log "must opkg install curl !!"; exit 2; }
-opkg list-installed | grep -q ca-certificates || { log "must opkg install ca-certificates !!"; exit 2; }
-export SSL_CERT_DIR=/etc/ssl/certs
-
 if [ ! -f acme.sh ]; then
   log "downloading acme.sh from github"
-  curl https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > acme.sh || exit 2;
+  curl --cacert /root/ssl/cacert.pem https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > acme.sh || exit 2;
   chmod a+x "acme.sh"
 fi
 
@@ -56,7 +53,7 @@ cd "$THIS_FOLDER"
 if [ ! -z "$*" ]; then
   [ "$#" -gt 1 ] && { log "only works with 1 domain"; exit 3; }
   DOMAIN="$1"
-  log "sweet, you're setting up a domain $DOMAIN"
+  log "setting up domain $DOMAIN"
   if ./acme.sh --issue -d "$DOMAIN" -w /www; then
     KEYFILE="$THIS_FOLDER/$DOMAIN/$DOMAIN.key"
     [ -f "$KEYFILE" ] || { log "WARNING: key file missing"; }
@@ -76,7 +73,7 @@ fi
 
 log "restoring port 80 http server configuration, enabled=$RESTORE_HTTP"
 if [ $RESTORE_HTTP = true ]; then
-  uci set uhttpd.main.listen_http="$HTTP_LISTEN" 
+  uci set uhttpd.main.listen_http="$HTTP_LISTEN"
   uci set firewall.http.enabled=1
 else
   uci delete uhttpd.main.listen_http
