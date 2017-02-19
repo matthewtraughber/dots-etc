@@ -4,11 +4,11 @@
 #
 ## manage an OpenWRT LetsEncrypt https installation
 # HOWTO:
-# - put update.sh in its own directory (like /root/.https)
-# - run ./update.sh your.domain.com (that domain needs to point to your router)
+# - put openWRT-letsEncrypt.sh in its own directory (like /root/.https)
+# - run ./openWRT-letsEncrypt.sh your.domain.com stage|prod (that domain needs to point to your router, LetsEncrypt stage or prod servers)
 #  * this get an issued cert from letsencrypt.org using the standalone tls method
 # - use crontab -e; add the line '0 0 * * * "/root/.https/openWRT-letsEncrypt.sh DOMAIN STAGE|PROD" >> /root/.https/openWRT-letsEncrypt.log 2>&'
-#  * this runs the update every day, logging everything to openWRT-letsEncrypt.log (update log directory as needed)
+#  * this runs the update every day, logging everything to openWRT-letsEncrypt.log
 #
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd ) # get path of this script
