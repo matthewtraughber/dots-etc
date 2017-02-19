@@ -106,3 +106,4 @@ uci commit firewall
 /etc/init.d/firewall restart &> /dev/null
 
 log "finished $0 at $(date)"
+log " "
