@@ -6,81 +6,103 @@
 # HOWTO:
 # - put update.sh in its own directory (like /root/.https)
 # - run ./update.sh your.domain.com (that domain needs to point to your router)
-#  * this get an issued cert from letsencrypt.org using the webroot verification method
-#  * also installs curl and ca-certificates packages
-# - use crontab -e; add the line `0 0 * * * "/root/.https/update.sh" >>/root/.https/log.txt 2>&`
-#  * this runs the update every day, logging everything to log.txt
+#  * this get an issued cert from letsencrypt.org using the standalone tls method
+# - use crontab -e; add the line '0 0 * * * "/root/.https/openWRT-letsEncrypt.sh" >> /root/.https/openWRT-letsEncrypt.log 2>&'
+#  * this runs the update every day, logging everything to openWRT-letsEncrypt.log (update log directory as needed)
 #
 
-THIS_FOLDER=$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd ) # get path of this script
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd ) # get path of this script
+ROOT_DIR=$(dirname "$( cd "$( dirname "${BASH_SOURCE:}" )" && pwd )") # get root directory of workspace
 
 log() { echo "[$(date)] $@"; }
+log "starting $0 at in $SCRIPT_DIR"
 
-log "starting $0 at in $THIS_FOLDER"
+# open port for HTTPS validation
+uci add firewall redirect
+uci set firewall.@redirect[-1].target=DNAT
+uci set firewall.@redirect[-1].src=wan
+uci set firewall.@redirect[-1].proto=tcp
+uci set firewall.@redirect[-1].src_dport=443
+uci set firewall.@redirect[-1].dest=lan
+uci set firewall.@redirect[-1].dest_ip=10.0.0.1
+uci set firewall.@redirect[-1].dest_port=8443
 
-# UCI is this great utility for editing /etc/config/* files easily
-if uci get firewall.http &> /dev/null; then
-  ## first time running!
-  log "adding http firewall rule"
-  uci set firewall.http=rule
-  uci set firewall.http.target=ACCEPT
-  uci set firewall.http.src=wan
-  uci set firewall.http.proto=tcp
-  uci set firewall.http.dest_port=80
-  uci set firewall.http.name='http web configuration'
-fi
+# commit changes
+uci commit firewall
 
-HTTP_LISTEN="$(uci get uhttpd.main.listen_http 2>/dev/null)" ##backup existing config
-HTTP_ENABLED="$(uci get firewall.http.enabled 2>/dev/null)" ##backup existing config
-[ ! -z $HTTP_LISTEN ] && [ "$HTTP_ENABLED" != "0" ] && RESTORE_HTTP=true || RESTORE_HTTP=false;
-log "HTTP server previously *$RESTORE_HTTP*"
-
-log "enabling http server"
-#uci set firewall.http.enabled=1 # uci: Invalid argument
-uci set uhttpd.main.listen_http=80
-uci commit
+# restart firewall
 /etc/init.d/firewall restart &> /dev/null
-/etc/init.d/uhttpd restart &> /dev/null
 
-if [ ! -f acme.sh ]; then
+if [ ! -f acme.sh ]; then # TODO: does this get the newest version of acme.sh?
   log "downloading acme.sh from github"
   curl https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > acme.sh || exit 2;
   chmod a+x "acme.sh"
 fi
 
-cd "$THIS_FOLDER"
+# start werk
 if [ ! -z "$*" ]; then
-  [ "$#" -gt 1 ] && { log "only works with 1 domain"; exit 3; }
-  DOMAIN="$1"
+  # check if too many parameters were passed
+  [ "$#" -gt 2 ] && { log "too many parameters"; exit 3; }
+
+  DOMAIN="$1" # set domain to parameter
   log "setting up domain $DOMAIN"
-  if ./acme.sh --issue -d "$DOMAIN" -w /www; then
-    KEYFILE="$THIS_FOLDER/$DOMAIN/$DOMAIN.key"
-    [ -f "$KEYFILE" ] || { log "WARNING: key file missing"; }
-    uci set uhttpd.main.key "$KEYFILE"
-    uci set uhttpd.main.cert "$THIS_FOLDER/$DOMAIN/$DOMAIN.cert"
-    uci commit uhttpd
-    /etc/init.d/uhttpd restart &> /dev/null
-    log "set uhttpd.main.key/cert to $(uci get uhttpd.main.key)/cert"
+
+  if [ $# -eq 2 ] ; then
+    ENV="$2" # set env to parameter
+    log "env flag is set to $ENV"
+
+    if [ $ENV == "stage" ] ; then
+      ACME="./acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
+    elif [ $ENV == "prod" ] ; then
+      ACME="./acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443"
+    else
+      log "invalid parameter - please specify stage or prod"
+      exit 3
+    fi
   else
-    log "./acme.sh returned error for domain $DOMAIN"
+    log "env flag isn't set; using stage"
+    ACME="./acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
+  fi
+
+  # do werk
+  if $ACME ; then
+    # grab key & cert files
+    KEYFILE="$ROOT_DIR/.acme.sh/$DOMAIN/$DOMAIN.key"
+    CERTFILE="$ROOT_DIR/.acme.sh/$DOMAIN/$DOMAIN.cer"
+
+    # log potential problems
+    [ -f "$KEYFILE" ] || { log "WARNING: key file missing"; }
+    [ -f "$CERTFILE" ] || { log "WARNING: cer file missing"; }
+
+    # set new key & cert files
+    uci set uhttpd.main.key=$KEYFILE
+    uci set uhttpd.main.cert=$CERTFILE
+
+    # commit changes
+    uci commit uhttpd
+
+    # restart uhttpd
+    /etc/init.d/uhttpd restart &> /dev/null
+
+    log "set uhttpd.main.key/cert to $KEYFILE & $CERTFILE"
+  else
+    log "./acme.sh returned error for $DOMAIN"
   fi
 else
+  # TODO: does this --cron work?
   log "running acme.sh update"
   sleep 1
   ./acme.sh --cron #--force
 fi
 
-log "restoring port 80 http server configuration, enabled=$RESTORE_HTTP"
-if [ $RESTORE_HTTP = true ]; then
-  uci set uhttpd.main.listen_http="$HTTP_LISTEN"
-  # uci set firewall.http.enabled=1 # uci: Invalid argument
-else
-  uci delete uhttpd.main.listen_http
-  #uci set firewall.http.enabled=0 # uci: Invalid argument
-fi
-uci commit
+log "cleaning up firewall modifications"
+# firewall cleanup
+uci delete firewall.@redirect[-1]
+
+# commit cleanup
+uci commit firewall
+
+# restart firewall
 /etc/init.d/firewall restart &> /dev/null
-/etc/init.d/uhttpd restart &> /dev/null
-[ $RESTORE_HTTP = true ] && log "http server staying enabled" || log "disabled HTTP server"
 
 log "finished $0 at $(date)"
