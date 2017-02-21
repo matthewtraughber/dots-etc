@@ -35,7 +35,7 @@ uci commit firewall
 
 if [ ! -f acme.sh ]; then # TODO: does this get the newest version of acme.sh?
   log "downloading acme.sh from github"
-  curl https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > acme.sh || exit 2;
+  curl https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > $SCRIPT_DIR/acme.sh || exit 2;
   chmod a+x "acme.sh"
 fi
 
@@ -106,4 +106,5 @@ uci commit firewall
 /etc/init.d/firewall restart &> /dev/null
 
 log "finished $0 at $(date)"
+log " "
 log " "
