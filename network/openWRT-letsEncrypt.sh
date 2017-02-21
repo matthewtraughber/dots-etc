@@ -36,7 +36,7 @@ uci commit firewall
 if [ ! -f acme.sh ]; then # TODO: does this get the newest version of acme.sh?
   log "downloading acme.sh from github"
   curl https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh > $SCRIPT_DIR/acme.sh || exit 2;
-  chmod a+x "acme.sh"
+  chmod a+x $SCRIPT_DIR/acme.sh
 fi
 
 # start werk
@@ -52,16 +52,16 @@ if [ ! -z "$*" ]; then
     log "env flag is set to $ENV"
 
     if [ $ENV == "stage" ] ; then
-      ACME="./acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
+      ACME="$SCRIPT_DIR/acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
     elif [ $ENV == "prod" ] ; then
-      ACME="./acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443"
+      ACME="$SCRIPT_DIR/acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443"
     else
       log "invalid parameter - please specify stage or prod"
       exit 3
     fi
   else
     log "env flag isn't set; using stage"
-    ACME="./acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
+    ACME="$SCRIPT_DIR/acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
   fi
 
   # do werk
