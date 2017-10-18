@@ -52,7 +52,7 @@ if [ ! -z "$*" ]; then
     log "env flag is set to $ENV"
 
     if [ $ENV == "stage" ] ; then
-      ACME="$SCRIPT_DIR/acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging"
+      ACME="$SCRIPT_DIR/acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443 --staging --force"
     elif [ $ENV == "prod" ] ; then
       ACME="$SCRIPT_DIR/acme.sh -d "$DOMAIN" --issue --tls --tlsport 8443"
     else
