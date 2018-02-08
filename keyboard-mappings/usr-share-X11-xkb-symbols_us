@@ -1,0 +1,14 @@
+// CAPSLOCK is a mode switch key to level3
+key <CAPS> { symbols[Group1] = [ ISO_Level3_Shift ] };
+
+modifier_map  Mod5 { ISO_Level3_Shift };
+
+// Custom key definitions
+key <AC01> { symbols[Group1] =  [ a, A, SunProps ] };
+key <AC02> { symbols[Group1] =  [ s, S, XF86AudioLowerVolume ] }; // this doesn't work
+key <AC03> { symbols[Group1] =  [ d, D, XF86AudioRaiseVolume ] }; // this doesn't work
+key <AD08> { symbols[Group1] = [ i, I, Up ] };
+key <AC08> { symbols[Group1] = [ k, K, Down ] };
+key <AC09> { symbols[Group1] = [ l, L, Right ] };
+key <AC07> { symbols[Group1] = [ j, J, Left] };
+key <SPCE> { symbols[Group1] = [ Space, Space, BackSpace ] };
