@@ -1,7 +1,7 @@
 partial modifier_keys
 xkb_symbols "mt_keymod" {
 	replace key <CAPS> { [ ISO_Level3_Shift			] };
-	replace key <AC01> { [ a, A, Alt_R 			] };
+	replace key <AC01> { [ a, A, SunProps 			] };
 	replace key <AC02> { [ s, S, XF86AudioLowerVolume	] };
 	replace key <AC03> { [ d, D, XF86AudioRaiseVolume	] };
 	replace key <AD08> { [ i, I, Up 			] };
