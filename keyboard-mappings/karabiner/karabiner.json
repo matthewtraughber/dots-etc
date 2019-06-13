@@ -287,7 +287,7 @@
                         ]
                     },
                     {
-                        "description": "fn + p = print screen area (macos cmd+shift+4)",
+                        "description": "fn + p = print screen area to clipboard (macos cmd+control+shift+4)",
                         "manipulators": [
                             {
                                 "from": {
@@ -303,6 +303,7 @@
                                     "key_code": "4",
                                     "modifiers": [
                                         "left_command",
+                                        "left_control",
                                         "left_shift"
                                     ]
                                   }
