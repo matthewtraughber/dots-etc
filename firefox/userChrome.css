@@ -1,0 +1,30 @@
+
+/* Hides tab bar for tree style tab */
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar > .toolbar-items {
+  opacity: 0;
+  pointer-events: none;
+}
+#main-window:not([tabsintitlebar="true"]) #TabsToolbar {
+    visibility: collapse !important;
+}
+
+
+/* Hides bookmark text for all bookmarks displayed in a toolbar */
+.bookmark-item > .toolbarbutton-text  {
+  display: none !important;
+}
+/* Small visual tweak so it looks exactly the same as if the bookmark really had no text */
+.bookmark-item > .toolbarbutton-icon  {
+  margin-inline-end: 0px !important;
+}
+
+
+/* Hides back/forward button */
+#main-window :-moz-any(#back-button, #forward-button) {
+  display: none !important;
+}
+
+/* Hides sidebar header */
+#sidebar-header {
+  display: none;
+}
