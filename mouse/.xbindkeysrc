@@ -8,19 +8,19 @@
 
 # Mouse wheel left
  "xte 'keydown Alt_L' 'key Left' 'keyup Left' 'keyup Alt_L'"
-  b:6
+ b:6
 
 # Mouse wheel right
  "xte 'keydown Alt_L' 'key Right' 'keyup Right' 'keyup Alt_L'"
-  b:7
+ b:7
 
 # Mouse bottom button
- "xte 'keydown Super_L' 'key Left' 'keyup Left' 'keyup Super_L'"
-  b:8
+ "xte 'keydown Control_L' 'keydown Alt_L' 'key Down' 'keyup Down' 'keyup Alt_L' 'keyup Control_L'"
+ b:8
 
 # Mouse top button
- "xte 'keydown Super_L' 'key Right' 'keyup Right' 'keyup Super_L'"
-  b:9
+ "xte 'keydown Control_L' 'keydown Alt_L' 'key Up' 'keyup Up' 'keyup Alt_L' 'keyup Control_L'"
+ b:9
 
 ##################################
 # End of xbindkeys configuration #

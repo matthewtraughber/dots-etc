@@ -1,5 +1,11 @@
 ### Mouse configuration tweaks
 
+#### Minimum prerequisites -
+* xbindkeys
+* xautomation
+* xev
+
+
 This uses xbindkeys. To configure, create .xbindkeysrc in your home directory with the intended tweaks. Run ```xbindkeys``` to load changes.
 
 Check out below for more details:
