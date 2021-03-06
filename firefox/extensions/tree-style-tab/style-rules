@@ -1,6 +1,7 @@
 .newtab-button-box {
   display: none;
 }
+
 #tabbar {
   bottom: 0 !important; /* Eliminate dead space on bottom */
 }
@@ -21,7 +22,6 @@
 }
 
 .tab.pinned {
-  border-bottom: solid 1px #00000012;
   border-left: none;
   border-right: none;
 }
@@ -31,6 +31,7 @@
 }
 
 tab-item {
-  padding: 2px;
+  --tab-size: 26px !important;
+  height: var(--tab-size);
   border: solid 1px #00000020;
 }
