@@ -35,3 +35,11 @@ tab-item {
   height: var(--tab-size);
   border: solid 1px #00000020;
 }
+
+.tab .label span {
+  color: #ffffff;
+}
+
+tab-item.active .background {
+  background-color: #00000020;
+}
