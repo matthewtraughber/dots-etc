@@ -53,7 +53,7 @@ tab-item tab-twisty {
 
 /* tab */
 tab-item {
-  --tab-size: 28px !important;
+  --tab-size: 24px !important;
   height: var(--tab-size);
 }
 
