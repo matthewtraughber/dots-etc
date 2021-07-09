@@ -1,45 +1,73 @@
+/* https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules#hide-the-new-tab-button-at-the-bottom-edge-of-the-tab-bar-1591 */
 .newtab-button-box {
   display: none;
 }
-
 #tabbar {
   bottom: 0 !important; /* Eliminate dead space on bottom */
 }
 
-.tab:not(:hover) .closebox {
+
+/* https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules#only-show-tab-close-button-on-hover-1448 */
+/* "#tabbar" is required for TST 3.4.0 and later! */
+#tabbar tab-item tab-item-substance:not(:hover) tab-closebox {
   display: none;
 }
 
+
+/* https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules#leave-as-little-space-before-the-tab-name-as-possible */
 /* As little space before the tab name as possible.
    The fold/unfold icon is not affected. */
-.tab:not(.pinned) {
+/* As little space before the tab name as possible.
+   The fold/unfold icon is not affected. */
+tab-item:not(.pinned) tab-item-substance {
   padding-left: 0px !important; /* !important is required when there are enough tabs to cause a scrollbar */
 }
 
+
+/* https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules#change-styling-of-pending-unloaded-tabs-1363 */
 /* Change styling of the favicon of pending (unloaded) tabs */
-.tab.discarded .favicon {
+tab-item.discarded tab-favicon {
   opacity: 0.5 !important;
 }
 
+
+/* https://github.com/piroor/treestyletab/wiki/Code-snippets-for-custom-style-rules#hide-twisty-and-collapseexpand-tree-by-clicking-on-tabs-icon-1743 */
+tab-item tab-twisty {
+  margin-right: -.75em;
+  opacity: 0 !important;
+  position: relative;
+  z-index: 10000;
+}
+
+
+/* remove pinned tab borders */
 .tab.pinned {
   border-left: none;
   border-right: none;
 }
 
+/* set sidebar background */
 :root.sidebar #background {
   background: #272A34;
 }
 
+/* tab */
 tab-item {
-  --tab-size: 26px !important;
+  --tab-size: 28px !important;
   height: var(--tab-size);
-  border: solid 1px #00000020;
 }
 
+/* tab text */
 .tab .label span {
-  color: #ffffff;
+  color: #fff;
 }
 
+/* active tab */
 tab-item.active .background {
-  background-color: #00000020;
+  background-color: #272A34;
+}
+
+/* hover tab */
+tab-item tab-item-substance:hover {
+  background: #272A34 !important;
 }
