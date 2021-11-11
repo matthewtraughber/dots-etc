@@ -334,7 +334,7 @@
                             }
                         ]
                     },
-                                        {
+                    {
                         "description": "fn + shift + p = print screen area to file (macos cmd+shift+4)",
                         "manipulators": [
                             {
