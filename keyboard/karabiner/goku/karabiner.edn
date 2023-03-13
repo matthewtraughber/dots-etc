@@ -1,0 +1,128 @@
+    ;; TODO: why is calva indentation so painful? 
+    
+    ;; !  | means mandatory
+    ;; #  | means optional
+    ;; C  | left_command
+    ;; T  | left_control
+    ;; O  | left_option
+    ;; S  | left_shift
+    ;; F  | fn
+    ;; Q  | right_command
+    ;; W  | right_control
+    ;; E  | right_option
+    ;; R  | right_shift
+    ;; P  | caps_lock
+    ;; !! | mandatory command + control + optional + shift (hyper)
+    ;; ## | optional any (this enables modifier key combos)
+
+{
+:layers {:mouse-mode {:key :tab
+                      :alone {:key :tab}}
+         :hyper-mode {:key :caps_lock
+                      :alone {:key :escape}}    ;; make the caps_lock key the hyper key
+                                                ;; In "System Preferences/Keyboard/Modifier Keys..."
+                                                ;; the Caps Lock Key is set to "No Action".
+         :opt-mode {:key :left_option
+                    :alone {:key :left_option}} ;; (possibly temporary)
+         }
+
+;; order matters for yabai commands (when focus_follows_mouse is enabled)
+;; TODO: paths are brittle, see if goku can accommodate improvements
+:templates {:ysplit "/opt/homebrew/bin/yabai -m window --toggle split" ; toggle window split type
+            :yrotate "/opt/homebrew/bin/yabai -m space --rotate 90" ; rotate tree
+            :yfull "/opt/homebrew/bin/yabai -m window --toggle zoom-fullscreen --focus" ; toggle window fullscreen zoom
+            :ylastspace "/opt/homebrew/bin/yabai -m space --focus recent" ; fast focus desktop
+            :ynextspace "~/.config/yabai/display_move_to_adjacent_space.sh next" ; next space without looping
+            :yprevspace "~/.config/yabai/display_move_to_adjacent_space.sh prev" ; previous space without looping
+            :ydisplay1nextspace "~/.config/yabai/specific_display_move_to_adjacent_space.sh next 1" ; display 1 next space without looping
+            :ydisplay1prevspace "~/.config/yabai/specific_display_move_to_adjacent_space.sh prev 1" ; display 1 previous space without looping
+            :ydisplay2nextspace "~/.config/yabai/specific_display_move_to_adjacent_space.sh next 2" ; display 2 next space without looping
+            :ydisplay2prevspace "~/.config/yabai/specific_display_move_to_adjacent_space.sh prev 2" ; display 2 previous space without looping
+            :ydisplay3nextspace "~/.config/yabai/specific_display_move_to_adjacent_space.sh next 3" ; display 3 next space without looping
+            :ydisplay3prevspace "~/.config/yabai/specific_display_move_to_adjacent_space.sh prev 3" ; display 3 previous space without looping
+            :ymovewindowprevspace "/opt/homebrew/bin/yabai -m window --space prev && /opt/homebrew/bin/yabai -m space --focus prev" ; move focused window to previous space
+            :ymovewindownextspace "/opt/homebrew/bin/yabai -m window --space next && /opt/homebrew/bin/yabai -m space --focus next" ; move focused window to next space
+            :ydetach "/opt/homebrew/bin/yabai -m window --toggle float && /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2" ; toggle float and center
+            :ystick "/opt/homebrew/bin/yabai -m window --toggle topmost && /opt/homebrew/bin/yabai -m window --toggle sticky" ; toggle topmost and sticky
+            :ybalance "/opt/homebrew/bin/yabai -m space --balance" ; balance size of windows
+            }
+
+:main [; possibly temporary; yabai functionality sans qmk config
+       {:des "opt mode"
+        :rules [:opt-mode
+                [:t [:ysplit]]
+                [:r [:yrotate]]
+                [:f [:yfull]]
+                [:w [:ylastspace]]
+                [:e [:ynextspace]]
+                [:q [:yprevspace]]
+                [:!Te [:ydisplay1nextspace]]
+                [:!Tq [:ydisplay1prevspace]]
+                [:!Td [:ydisplay2nextspace]]
+                [:!Ta [:ydisplay2prevspace]]
+                [:!Tc [:ydisplay3nextspace]]
+                [:!Tz [:ydisplay3prevspace]]
+                [:!Sq [:ymovewindowprevspace]]
+                [:!Se [:ymovewindownextspace]]
+                [:d [:ydetach]]
+                [:s [:ystick]]
+                [:a [:ybalance]]
+                [:spacebar [:mission_control]] ; temporary
+                ]}
+
+       ; order matters
+       ; TODO: fix pressing cmd before caps turns capslock on/off
+       {:des "hyper mode"
+        :rules [:hyper-mode
+                ;; screenshots
+                [:p [:f13]] ; flameshot 
+                [:5 [:!SC5]] ; '5' - Screenshot and recording options
+
+                ;; navigation
+                [:spacebar [:delete_or_backspace]] ; backspace
+
+                ;; arrow keys
+                [:##j [:left_arrow]] ; left arrow
+                [:##i [:up_arrow]] ; up arrow
+                [:##k [:down_arrow]] ; down arrow
+                [:##l [:right_arrow]] ; right arrow
+
+                ;; volume
+                ;; TODO: add linking to option + shift for quarter adjustments
+                [:s [:volume_decrement]] ; decrease volume
+                [:d [:volume_increment]] ; increase volume
+                [:f [:mute]] ; mute
+
+                ;; media
+                [:q [:rewind]] ; rewind
+                [:w [:play_or_pause]] ; play / pause
+                [:e [:fastforward]] ; fast forward
+
+                ;; brightness
+                [:!Cs [:display_brightness_decrement]] ; decrease brightness
+                [:!Cd [:display_brightness_increment]] ; increase brightness
+                ]}
+
+       ;; mouse-mode (tab) + arrow key to move the cursor
+       ;; mouse-mode (tab) + shift + arrow key to move the cursor at reduced  speed
+       ;; mouse-mode (tab) + left_shift + left_control + arrow key to move the cursor at significantly reduced speed
+       ;; mouse-mode + u for mouse button 1
+       ;; mouse-mode + o for mouse button 2 
+       {:des "mouse mode"
+        :rules [:mouse-mode
+                [:k {:mkey {:y 4000}}]
+                [:i {:mkey {:y -4000}}]
+                [:j {:mkey {:x -4000}}]
+                [:l {:mkey {:x 4000}}]
+                [:!Sk {:mkey {:y 600}}]
+                [:!Si {:mkey {:y -600}}]
+                [:!Sj {:mkey {:x -600}}]
+                [:!Sl {:mkey {:x 600}}]
+                [:!TSk {:mkey {:y 300}}]
+                [:!TSi {:mkey {:y -300}}]
+                [:!TSj {:mkey {:x -300}}]
+                [:!TSl {:mkey {:x 300}}]
+                [:##u {:pkey :button1}]
+                [:##o {:pkey :button2}]
+                ]}
+       ]}
