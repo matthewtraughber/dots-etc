@@ -45,6 +45,7 @@
             :ydetach "/opt/homebrew/bin/yabai -m window --toggle float && /opt/homebrew/bin/yabai -m window --grid 4:4:1:1:2:2" ; toggle float and center
             :ystick "/opt/homebrew/bin/yabai -m window --toggle topmost && /opt/homebrew/bin/yabai -m window --toggle sticky" ; toggle topmost and sticky
             :ybalance "/opt/homebrew/bin/yabai -m space --balance" ; balance size of windows
+            :yquakewez "~/.config/yabai/quake-mode.sh WezTerm" ; toggle wezterm
             }
 
 :main [; possibly temporary; yabai functionality sans qmk config
@@ -74,6 +75,9 @@
        ; TODO: fix pressing cmd before caps turns capslock on/off
        {:des "hyper mode"
         :rules [:hyper-mode
+                ;; screenshots
+                [:a [:yquakewez]] ; wezterm quake mode 
+
                 ;; screenshots
                 [:p [:f13]] ; flameshot 
                 [:5 [:!SC5]] ; '5' - Screenshot and recording options
