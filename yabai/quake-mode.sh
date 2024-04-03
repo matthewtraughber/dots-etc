@@ -18,23 +18,31 @@ validate_args() {
         exit 1
     fi
 
-    readonly APP=$1
+    readonly APP_NAME=$1
 }
 
 main() {
-    windows="$($yabai -m query --windows)"
+    app=$($hs -c "hs.application.get('$APP_NAME')")
 
-    app_window=$($jq ".[] | select(.app==\"$APP\")" <<< "$windows")
-
-    id=$($jq '."id"' <<< "$app_window")
-    is_visible=$($jq '."is-visible"' <<< "$app_window")
-    
-    if $is_visible; then
-        $hs -c "hs.application.find('$APP'):hide()"
+    if [ "$app" == "nil" ]
+    then
+        $hs -c "hs.application.open('$APP_NAME')"
+        $hs -c "hs.application.get('$APP_NAME'):mainWindow():maximize(0)"
     else
-        $yabai -m window "$id" --space mouse && $yabai -m window --focus "$id"
+        windows="$($yabai -m query --windows)"
 
-        $hs -c "hs.application.find('$APP'):activate()"
+        app_window=$($jq ".[] | select(.app==\"$APP_NAME\")" <<< "$windows")
+
+        id=$($jq '."id"' <<< "$app_window")
+        is_visible=$($jq '."is-visible"' <<< "$app_window")
+
+        if $is_visible; then
+            $hs -c "hs.application.get('$APP_NAME'):hide()"
+        else
+            $yabai -m window "$id" --space mouse && $yabai -m window --focus "$id" --grid 1:1:0:0:1:1 # maximized
+
+            $hs -c "hs.application.get('$APP_NAME'):unhide()"
+        fi
     fi
 }
 
